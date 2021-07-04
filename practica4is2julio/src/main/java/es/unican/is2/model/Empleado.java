@@ -1,18 +1,29 @@
 package es.unican.is2.model;
-
 import java.time.LocalDate;
-
-public class Empleado {
-
+public class Empleado{
+	public class DatoIncorrectoException extends Exception{};
 	private String nombre;
 	private LocalDate fechaContratacion;
 	private boolean baja;
 	private Categoria categoria;
-	public Empleado(String nombre, LocalDate fechaContratacion, boolean baja,Categoria categoria) {
+
+	public Empleado(String nombre, LocalDate fechaContratacion,Categoria categoria) throws DatoIncorrectoException {
+		this.categoria=categoria;
 		this.nombre=nombre;
 		this.fechaContratacion=fechaContratacion;
-		this.baja=baja;
-		this.categoria=categoria;
+		this.baja=false;
+		LocalDate diaActual = LocalDate.now();
+		if(fechaContratacion==null) {
+			throw new NullPointerException();
+		}
+		if(fechaContratacion.isAfter(diaActual)) {
+			throw new DatoIncorrectoException();
+		}
+		if(categoria==null) {
+			throw new NullPointerException();
+		} else if(categoria!=Categoria.DIRECTIVO && categoria!=Categoria.GESTOR && categoria!=Categoria.OBRERO) {
+			throw new DatoIncorrectoException();
+		}
 	}
 	public double sueldoBruto() {
 		LocalDate diaActual = LocalDate.now();
@@ -28,16 +39,12 @@ public class Empleado {
 			sueldo+=1500;
 			break;
 		}
-
-
 		if(fechaContratacion.isBefore(diaActual.minusYears(20))) {
 			sueldo+=200;
 		}
-
 		else if(fechaContratacion.isBefore(diaActual.minusYears(10))) {
 			sueldo+=100;
 		}
-
 		else if(fechaContratacion.isBefore(diaActual.minusYears(5))) {
 			sueldo+=50;
 		}
@@ -45,15 +52,12 @@ public class Empleado {
 		if(baja) {
 			sueldo*=0.75;
 		}
-
 		return sueldo;
 	}
-
-
-	public void darDeAlta() {
+	public void darAlta() {
 		baja=false;
 	}
-	public void darDeBaja() {
+	public void darBaja() {
 		baja=true;
 	}
 	public String getNombre() {
@@ -68,4 +72,5 @@ public class Empleado {
 	public void setCategoria(Categoria categoria) {
 		this.categoria=categoria;
 	}
+
 }
