@@ -24,11 +24,14 @@ public class ListaOrdenadaAcotada<E extends Comparable<E>> implements IListaAcot
 		this(MAX_POR_OMISION);
 	}
 
-	public E get(int indice) {
+	public E get( int indice) throws IndexOutOfBoundsException{
+		if(indice > ultimo) {
+			throw new IndexOutOfBoundsException();
+		}
 		return lista[indice];
 	}
 
-	public void add(E elemento) {
+	public void add( E elemento) {
 		// compruebo si cabe
 		if (ultimo == lista.length - 1) {
 			throw new IllegalStateException();
@@ -42,7 +45,7 @@ public class ListaOrdenadaAcotada<E extends Comparable<E>> implements IListaAcot
 			}
 		}
 		// desplaza elementos hacia adelante
-		for (int i = ultimo; i > indice; i--) {
+		for (int i = ultimo; i >= indice; i--) {
 			lista[i + 1] = lista[i];
 		}
 		// añade el elemento
@@ -55,14 +58,14 @@ public class ListaOrdenadaAcotada<E extends Comparable<E>> implements IListaAcot
 		if (indice > ultimo) {
 			throw new IndexOutOfBoundsException();
 		}
-		E borrado = lista[indice];
+		E e = lista[indice];
 		// desplaza elementos hacia atras
 		for (int i = indice + 1; i <= ultimo; i++) {
-			lista[i - 1] = lista[i];
+			lista[i - 1] = lista[i];	
 		}
 		// actualiza ultimo y retorna el elemento borrado
 		ultimo--;
-		return borrado;
+		return e;
 	}
 
 	public int size() {
@@ -73,5 +76,14 @@ public class ListaOrdenadaAcotada<E extends Comparable<E>> implements IListaAcot
 		ultimo = -1;
 
 	}
+	@Override 
+	public String toString() {
+		String string="[";
+		for(E e:lista	) {
+			string+=e+",";
 
+		}
+		string+="] Ultimo: "+ultimo;
+		return string;
+	}
 }
