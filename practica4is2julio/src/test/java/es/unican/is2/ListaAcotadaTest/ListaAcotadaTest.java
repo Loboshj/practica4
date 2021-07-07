@@ -257,7 +257,7 @@ public class ListaAcotadaTest {
 		try {
 			sut.remove(3);
 			fail("No se ha recogido error al intentar obtener elemento de indice superior");
-		}catch(Exception e) {
+		}catch(Exception e) {	
 		}
 	}
 
